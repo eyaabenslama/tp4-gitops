@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: podinfo
+spec:
+  namespaceSelector:
+    matchNames:
+      - demo
+  selector:
+    matchLabels:
+      app: podinfo
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 15s

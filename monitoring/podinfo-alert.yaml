@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: podinfo-alerts
+spec:
+  groups:
+    - name: podinfo
+      rules:
+        - alert: PodinfoImagePullFailure
+          expr: |
+            max(kube_pod_container_status_waiting_reason{
+              namespace="demo",
+              pod=~"podinfo-.*",
+              reason=~"ErrImagePull|ImagePullBackOff"
+            }) > 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Echec de telechargement de l'image Podinfo"
